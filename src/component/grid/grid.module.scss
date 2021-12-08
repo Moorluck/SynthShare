@@ -1,0 +1,15 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+
+    div {
+        background-color: orange;
+        opacity: 0.4;
+        margin: 2px;
+        aspect-ratio: 1;
+    }
+
+    .active {
+        opacity: 1;
+    }
+}
