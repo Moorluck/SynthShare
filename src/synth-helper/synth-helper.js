@@ -1,25 +1,34 @@
 import * as Tone from 'tone'
 
 const ToneHelper = {
-    resume: function() {
-        Tone.context.resume()
-    },
+
+    beat: 0,
     
     start: async function() {
         await Tone.start()
     },
 
-    createSynth : function(list) {
+    play: function() {
+        Tone.Transport.start()
+    },
+
+    cancel: function() {
+        Tone.Transport.cancel()
+    },
+
+    setTempo: function() {
+        Tone.Transport.bpm = 80
+    },
+
+    createSynth : function(number, type) {
         if (Tone.context.state !== 'running') {
             Tone.context.resume();
         }
-        console.log(list)
-        Tone.start()
         const synthList = []
-        for (const element of list) {
+        for (let i = 0; i < number; i++) {
             const synth = new Tone.Synth({
                 oscillator: {
-                    type: "fatsine"
+                    type: type
                 }
             }).toDestination()
             synthList.push(synth)
@@ -27,19 +36,32 @@ const ToneHelper = {
         return synthList
     },
     
-    updateLoop : function(list, synthList) {
-    
+    updateLoop : function(list, synthList, mode, time) {
+
         if (Tone.context.state !== 'running') {
             Tone.context.resume();
         }
 
         for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < list[0].length; j++) {
-                if (list[i][j] === 1) {
-                    console.log("trigger !" + i +" " + j)
-                }
+            console.log(list[i][this.beat]);
+            if (list[i][this.beat] === 1) {
+                synthList[i].triggerAttackRelease(mode[i], "16n", time) 
             }
         }
+
+        if (this.beat < 15) {
+            this.beat += 1
+        }
+        else {
+            this.beat = 0
+        }
+    },
+
+    scheduleRepeat: function(list, synthList, mode, callBack) {
+        Tone.Transport.scheduleRepeat((time) => {
+            this.updateLoop(list, synthList, mode, time)
+            callBack()
+        }, "16n")
     }
 }
 

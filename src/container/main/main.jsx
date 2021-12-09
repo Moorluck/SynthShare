@@ -1,6 +1,8 @@
 import { Fragment, useEffect, useState } from "react"
+import { Tone } from "tone/build/esm/core/Tone"
 import Grid from "../../component/grid/grid"
 import Menu from "../../component/menu/menu"
+import ToneHelper from "../../synth-helper/synth-helper"
 import style from "./main.module.scss"
 
 const Main = function(props) {
@@ -10,18 +12,21 @@ const Main = function(props) {
 
     const [list, setList] = useState([])
     const [currentTime, setCurrentTime] = useState(0)
-    const [tempoTimeOut, setTempoTimeOut] = useState({})
+    const [synthList, setSynthList] = useState([])
+    const [mode, setMode] = useState(["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"])
 
     useEffect(() => {
+        ToneHelper.play()
+        setSynthList(ToneHelper.createSynth(gridHeight, "fatsine"))
         clearList()
     }, [])
 
     useEffect(() => {
-        startTimeOut()
-        return () => clearTimeout(tempoTimeOut)
-    }, [currentTime])
+        startTime()
+    }, [list])
 
     function clearList() {
+        console.log("clear");
         setList([])
 
         for (let i = 0; i < gridHeight; i++) {
@@ -36,18 +41,26 @@ const Main = function(props) {
         }
     }
 
-    function startTimeOut() {
-        setTempoTimeOut(setTimeout(()=> {
-            if (currentTime >= 15) {
-                setCurrentTime(0)
+    function updateBeat() {
+        setCurrentTime(previousTime => {
+            if (previousTime < 15) {
+                return previousTime + 1
             }
             else {
-                setCurrentTime(previousTime => previousTime + 1)
+                return 0
             }
-        }, 500))
+        })
+    }
+
+    function startTime() {
+        ToneHelper.cancel()
+        ToneHelper.scheduleRepeat(list, synthList, mode, () => {
+            updateBeat()
+        })
     }
 
     function handleCellClick(rowIndex, columnIndex) {
+        console.log("handleclick");
         const newList = []
         for (let i = 0; i < list.length; i++) {
             const row = []
