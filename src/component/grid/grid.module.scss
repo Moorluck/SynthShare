@@ -7,9 +7,16 @@
         opacity: 0.4;
         margin: 2px;
         aspect-ratio: 1;
+        border-radius: 7%;
+        transition: opacity 330ms, border-radius 330ms, background-color 330ms;
     }
 
     .active {
         opacity: 1;
+        border-radius: 15%;
+    }
+
+    .playing {
+        background-color: yellow;
     }
 }

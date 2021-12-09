@@ -1,31 +1,64 @@
 import { useEffect, useState } from "react"
 import style from "./grid.module.scss"
+import ToneHelper from "../../synth-helper/synth-helper"
 
 const Grid = function(props) {
 
-    const {list, onCellClick} = props
+    const {list, currentTime, onCellClick, playing} = props
     const [listJSX, setListJSX] = useState([])
+    const [synthList, setSynthList] = useState([])
+    const [synthAlreadyInit, setSynthAlreadyInit] = useState(false)
 
-    useEffect(() => {
-        console.log(list)
+    function updateListDisplay() {
         const listOfCell = []
+
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < list[0].length; j++) {
                 listOfCell.push(
                     <div key={i + "-" + j} onClick={(e) => onCellClick(i, j)}
-                        className={(list[i][j] === 1) ? style.active : ""}></div>
+                        className={
+                            ((list[i][j] === 1) ? style.active : "") + " " + ((j===currentTime) ? style.playing : "")
+                        }>
+                    </div>
                 )
             }
         }
 
         setListJSX(listOfCell)
-    }, [list])
+    }
+
+    function updateLoop() {
+        if (synthList.length !== 0) {
+            ToneHelper.updateLoop(list, synthList)
+        }
+    }
+
+    useEffect(() => {
+        updateListDisplay()
+    }, [list, currentTime])
     
 
+    useEffect(() => {
+        if (list.length > 0 && !synthAlreadyInit) {
+            ToneHelper.start().then(() => {
+                setSynthList(previousSynthList => ToneHelper.createSynth(list))
+                setSynthAlreadyInit(true)
+            })
+        }
+        else {
+            updateLoop()
+        }
+
+    }, [list])
+
     return (
-        <div className={style.grid}>
-            {listJSX}
-        </div>
+        <>
+            <button onClick={() => console.log(synthList)}>List</button>
+            <div className={style.grid}>
+                {listJSX}
+            </div>
+        </>
+        
     )
 }
 

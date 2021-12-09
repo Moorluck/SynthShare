@@ -7,14 +7,23 @@ const Main = function(props) {
 
     const gridHeight = 14
     const gridWidth = 16
+
     const [list, setList] = useState([])
+    const [currentTime, setCurrentTime] = useState(0)
+    const [tempoTimeOut, setTempoTimeOut] = useState({})
 
     useEffect(() => {
         clearList()
     }, [])
 
+    useEffect(() => {
+        startTimeOut()
+        return () => clearTimeout(tempoTimeOut)
+    }, [currentTime])
+
     function clearList() {
         setList([])
+
         for (let i = 0; i < gridHeight; i++) {
             const row = []
             for (let j = 0; j < gridWidth; j++) {
@@ -25,6 +34,17 @@ const Main = function(props) {
                 previousList => [...previousList, row]
             )
         }
+    }
+
+    function startTimeOut() {
+        setTempoTimeOut(setTimeout(()=> {
+            if (currentTime >= 15) {
+                setCurrentTime(0)
+            }
+            else {
+                setCurrentTime(previousTime => previousTime + 1)
+            }
+        }, 500))
     }
 
     function handleCellClick(rowIndex, columnIndex) {
@@ -51,12 +71,10 @@ const Main = function(props) {
         )
     }
 
-    
-
     return (
         <div className={style.main}>
             <Menu onClickClear={clearList}></Menu>
-            <Grid list={list} onCellClick={handleCellClick}></Grid>
+            <Grid list={list} onCellClick={handleCellClick} currentTime={currentTime} playing={true}></Grid>
         </div>
     )
 }
