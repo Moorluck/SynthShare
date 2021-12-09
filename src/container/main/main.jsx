@@ -74,7 +74,7 @@ const Main = function(props) {
     return (
         <div className={style.main}>
             <Menu onClickClear={clearList}></Menu>
-            <Grid list={list} onCellClick={handleCellClick} currentTime={currentTime} playing={true}></Grid>
+            <Grid list={list} onCellClick={handleCellClick} currentTime={currentTime}></Grid>
         </div>
     )
 }

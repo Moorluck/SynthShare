@@ -4,7 +4,7 @@ import ToneHelper from "../../synth-helper/synth-helper"
 
 const Grid = function(props) {
 
-    const {list, currentTime, onCellClick, playing} = props
+    const {list, currentTime, onCellClick} = props
     const [listJSX, setListJSX] = useState([])
     const [synthList, setSynthList] = useState([])
     const [synthAlreadyInit, setSynthAlreadyInit] = useState(false)
@@ -53,7 +53,6 @@ const Grid = function(props) {
 
     return (
         <>
-            <button onClick={() => console.log(synthList)}>List</button>
             <div className={style.grid}>
                 {listJSX}
             </div>
