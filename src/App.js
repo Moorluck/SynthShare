@@ -8,18 +8,14 @@ import AsideRight from './container/aside-right/aside-right';
 
 function App() {
 
-  const [mainJSX, setMainJSX] = useState(<></>)
-  const [asideLeftJSX, setAsideLeftJSX] = useState(<></>)
-  const [asideRightJSX, setAsideRightJSX] = useState(<></>)
   const [buttonLaunchVisibility, setButtonLaunchVisibility] = useState(true)
+  const [visible, setVisible] = useState(false)
   
   function launch() {
     ToneHelper.start()
       .then(() => {
         setButtonLaunchVisibility(false)
-        setAsideLeftJSX(<AsideLeft></AsideLeft>)
-        setMainJSX(<Main></Main>)
-        setAsideRightJSX(<AsideRight></AsideRight>)
+        setVisible(true)
       })
   }
 
@@ -32,9 +28,17 @@ function App() {
           ""
         )
       }
-      {asideLeftJSX}
-      {mainJSX}
-      {asideRightJSX}
+
+      {
+        (visible) && (
+          <>
+            <AsideLeft></AsideLeft>
+            <Main></Main>
+            <AsideRight></AsideRight>
+          </>
+        )
+      }
+      
     </div>
   );
 }

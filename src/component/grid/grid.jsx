@@ -5,13 +5,14 @@ import ToneHelper from "../../synth-helper/synth-helper"
 const Grid = function(props) {
 
     const {list, currentTime, onCellClick} = props
-    const [listJSX, setListJSX] = useState([])
     const [synthList, setSynthList] = useState([])
     const [synthAlreadyInit, setSynthAlreadyInit] = useState(false)
 
+    const listJSX = updateListDisplay()
+
     function updateListDisplay() {
         const listOfCell = []
-
+        console.log(list)
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < list[0].length; j++) {
                 listOfCell.push(
@@ -24,7 +25,7 @@ const Grid = function(props) {
             }
         }
 
-        setListJSX(listOfCell)
+        return listOfCell
     }
 
     function updateLoop() {
@@ -32,13 +33,10 @@ const Grid = function(props) {
             ToneHelper.updateLoop(list, synthList)
         }
     }
-
-    useEffect(() => {
-        updateListDisplay()
-    }, [list, currentTime])
     
 
     useEffect(() => {
+
         if (list.length > 0 && !synthAlreadyInit) {
             ToneHelper.start().then(() => {
                 setSynthList(previousSynthList => ToneHelper.createSynth(list))
