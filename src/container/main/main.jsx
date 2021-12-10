@@ -1,5 +1,4 @@
-import { Fragment, useEffect, useState } from "react"
-import { Tone } from "tone/build/esm/core/Tone"
+import { useEffect, useState } from "react"
 import Grid from "../../component/grid/grid"
 import Menu from "../../component/menu/menu"
 import ToneHelper from "../../synth-helper/synth-helper"
@@ -12,18 +11,28 @@ const Main = function(props) {
 
     const [list, setList] = useState([])
     const [currentTime, setCurrentTime] = useState(0)
-    const [synthList, setSynthList] = useState([])
-    const [mode, setMode] = useState(["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"])
+    const [loopInitialize, setLoopInitialize] = useState(false)
 
     useEffect(() => {
         ToneHelper.play()
-        setSynthList(ToneHelper.createSynth(gridHeight, "fatsine"))
         clearList()
+        ToneHelper.synthList = ToneHelper.createSynth(gridHeight, "sine")
     }, [])
 
     useEffect(() => {
-        startTime()
+        ToneHelper.list = list
     }, [list])
+
+    useEffect(() => {
+        if (!loopInitialize && ToneHelper.list.length !== 0 && ToneHelper.synthList.length !== 0) {
+            ToneHelper.cancel()
+            ToneHelper.scheduleRepeat((time) => {
+                updateBeat()
+                ToneHelper.updateLoop(time)
+            })
+            setLoopInitialize(true)
+        }   
+    }, [list, loopInitialize])
 
     function clearList() {
         console.log("clear");
@@ -49,13 +58,6 @@ const Main = function(props) {
             else {
                 return 0
             }
-        })
-    }
-
-    function startTime() {
-        ToneHelper.cancel()
-        ToneHelper.scheduleRepeat(list, synthList, mode, () => {
-            updateBeat()
         })
     }
 

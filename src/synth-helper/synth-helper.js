@@ -1,8 +1,12 @@
 import * as Tone from 'tone'
+import Mode from './mode'
 
 const ToneHelper = {
 
     beat: 0,
+    list: [],
+    synthList: [],
+    mode: Mode.C.major,
     
     start: async function() {
         await Tone.start()
@@ -16,8 +20,8 @@ const ToneHelper = {
         Tone.Transport.cancel()
     },
 
-    setTempo: function() {
-        Tone.Transport.bpm = 80
+    setTempo: function(tempo) {
+        Tone.Transport.bpm.value = tempo
     },
 
     createSynth : function(number, type) {
@@ -28,7 +32,8 @@ const ToneHelper = {
         for (let i = 0; i < number; i++) {
             const synth = new Tone.Synth({
                 oscillator: {
-                    type: type
+                    type: type,
+                    volume: -12
                 }
             }).toDestination()
             synthList.push(synth)
@@ -36,16 +41,16 @@ const ToneHelper = {
         return synthList
     },
     
-    updateLoop : function(list, synthList, mode, time) {
+    updateLoop : function(time) {
 
         if (Tone.context.state !== 'running') {
             Tone.context.resume();
         }
 
-        for (let i = 0; i < list.length; i++) {
-            console.log(list[i][this.beat]);
-            if (list[i][this.beat] === 1) {
-                synthList[i].triggerAttackRelease(mode[i], "16n", time) 
+        for (let i = 0; i < this.list.length; i++) {
+            console.log(this.list[i][this.beat]);
+            if (this.list[i][this.beat] === 1) {
+                this.synthList[i].triggerAttackRelease(this.mode[i], "16n", time) 
             }
         }
 
@@ -57,10 +62,9 @@ const ToneHelper = {
         }
     },
 
-    scheduleRepeat: function(list, synthList, mode, callBack) {
+    scheduleRepeat: function(callBack) {
         Tone.Transport.scheduleRepeat((time) => {
-            this.updateLoop(list, synthList, mode, time)
-            callBack()
+            callBack(time)
         }, "16n")
     }
 }
