@@ -2,6 +2,7 @@
   "name": "synth",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://github.com/Moorluck/SynthShare",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
@@ -17,6 +18,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "deploy":"gh-pages -b master -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
