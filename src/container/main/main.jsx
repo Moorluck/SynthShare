@@ -16,7 +16,7 @@ const Main = function(props) {
     useEffect(() => {
         ToneHelper.play()
         clearList()
-        ToneHelper.synthList = ToneHelper.createSynth(gridHeight, "sine")
+        ToneHelper.synthList = ToneHelper.createSynth(gridHeight)
     }, [])
 
     useEffect(() => {

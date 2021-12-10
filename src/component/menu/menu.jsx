@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 import style from "./menu.module.scss"
 import ToneHelper from "../../synth-helper/synth-helper"
 import Mode from "../../synth-helper/mode"
+import { Tone } from "tone/build/esm/core/Tone"
 
 const Menu = function(props) {
 
     const {onClickClear} = props
     const [scale, setScale] = useState("C")
     const [mode, setMode] = useState("major")
+    const [sound, setSound] = useState("sine")
     const [tempo, setTempo] = useState(120)
 
     useEffect(() => {
@@ -17,6 +19,11 @@ const Menu = function(props) {
     useEffect(() => {
         ToneHelper.setTempo(tempo)
     }, [tempo])
+
+    useEffect(() => {
+        ToneHelper.type = sound
+        ToneHelper.changeSynth(sound)
+    }, [sound])
 
     function onTempoChange(value) {
         if (value < 200) {
@@ -50,6 +57,13 @@ const Menu = function(props) {
             </select>
 
             <input type="number" onChange={(e) => onTempoChange(e.target.value)} value={tempo}></input>
+
+            <select name="sound" id="select-sound" onChange={(e) => setSound(e.target.value)} value={sound}>
+                <option value="sine">Sine</option>
+                <option value="pulse">Pulse</option>
+                <option value="square">Square</option>
+                <option value="triangle">Triangle</option>
+            </select>
 
         </div>
     )

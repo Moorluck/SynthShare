@@ -7,6 +7,7 @@ const ToneHelper = {
     list: [],
     synthList: [],
     mode: Mode.C.major,
+    type: "sine",
     
     start: async function() {
         await Tone.start()
@@ -24,7 +25,7 @@ const ToneHelper = {
         Tone.Transport.bpm.value = tempo
     },
 
-    createSynth : function(number, type) {
+    createSynth : function(number) {
         if (Tone.context.state !== 'running') {
             Tone.context.resume();
         }
@@ -32,13 +33,25 @@ const ToneHelper = {
         for (let i = 0; i < number; i++) {
             const synth = new Tone.Synth({
                 oscillator: {
-                    type: type,
+                    type: this.type,
                     volume: -12
                 }
             }).toDestination()
             synthList.push(synth)
         }
         return synthList
+    },
+
+    changeSynth: function(type) {
+        for (let i = 0; i < this.synthList.length; i++) {
+            this.synthList[i].disconnect()
+            this.synthList[i] = new Tone.Synth({
+                oscillator: {
+                    type: this.type,
+                    volume: -12
+                }
+            }).toDestination()
+        }
     },
     
     updateLoop : function(time) {
