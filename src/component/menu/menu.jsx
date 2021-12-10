@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import style from "./menu.module.scss"
 import ToneHelper from "../../synth-helper/synth-helper"
 import Mode from "../../synth-helper/mode"
-import { Tone } from "tone/build/esm/core/Tone"
 
 const Menu = function(props) {
 
