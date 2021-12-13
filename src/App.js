@@ -32,9 +32,7 @@ function App() {
       {
         (visible) && (
           <>
-            <AsideLeft></AsideLeft>
             <Main></Main>
-            <AsideRight></AsideRight>
           </>
         )
       }

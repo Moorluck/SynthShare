@@ -60,10 +60,10 @@ const ToneHelper = {
             Tone.context.resume();
         }
 
-        for (let i = 0; i < this.list.length; i++) {
+        for (let i = this.list.length - 1; i >= 0; i--) {
             console.log(this.list[i][this.beat]);
             if (this.list[i][this.beat] === 1) {
-                this.synthList[i].triggerAttackRelease(this.mode[i], "16n", time) 
+                this.synthList[i].triggerAttackRelease(this.mode[(this.list.length - 1) - i], "16n", time) 
             }
         }
 

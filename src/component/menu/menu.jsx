@@ -36,33 +36,41 @@ const Menu = function(props) {
 
     return (
         <div className={style.main}>
-            <button onClick={onClickClear}>Clear</button>
+            <div className={style.clearContainer}>
+                <button onClick={onClickClear}>Clear</button>
+            </div>
             
-            <select name="scale" id="select-scale" onChange={(e) => setScale(e.target.value)} value={scale}>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
-                <option value="F">F</option>
-                <option value="G">G</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-            </select>
+            <div className={style.selectContainer}>
+                <select name="scale" id="select-scale" onChange={(e) => setScale(e.target.value)} value={scale}>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
 
-            <select name="mode" id="select-mode" onChange={(e) => setMode(e.target.value)} value={mode}>
-                <option value="major">Major</option>
-                <option value="minor">Minor</option>
-                <option value="dorian">Dorian</option>
-                <option value="myxolidian">Myxolidian</option>
-            </select>
+                <select name="mode" id="select-mode" onChange={(e) => setMode(e.target.value)} value={mode}>
+                    <option value="major">Major</option>
+                    <option value="minor">Minor</option>
+                    <option value="dorian">Dorian</option>
+                    <option value="myxolidian">Myxolidian</option>
+                </select>
 
-            <input type="number" onChange={(e) => onTempoChange(e.target.value)} value={tempo}></input>
+                <div>
+                    <input type="number" onChange={(e) => onTempoChange(e.target.value)} value={tempo} size="1"></input>
+                </div>
+                
 
-            <select name="sound" id="select-sound" onChange={(e) => setSound(e.target.value)} value={sound}>
-                <option value="sine">Sine</option>
-                <option value="pulse">Pulse</option>
-                <option value="square">Square</option>
-                <option value="triangle">Triangle</option>
-            </select>
+                <select name="sound" id="select-sound" onChange={(e) => setSound(e.target.value)} value={sound}>
+                    <option value="sine">Sine</option>
+                    <option value="pulse">Pulse</option>
+                    <option value="square">Square</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </div>
+            
 
         </div>
     )
