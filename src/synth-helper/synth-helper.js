@@ -1,5 +1,8 @@
 import * as Tone from 'tone'
+import Effect from './effect'
 import Mode from './mode'
+
+
 
 const ToneHelper = {
 
@@ -8,6 +11,7 @@ const ToneHelper = {
     synthList: [],
     mode: Mode.C.major,
     type: "sine",
+    effect: Effect.none,
     
     start: async function() {
         await Tone.start()
@@ -42,16 +46,33 @@ const ToneHelper = {
         return synthList
     },
 
-    changeSynth: function(type) {
-        for (let i = 0; i < this.synthList.length; i++) {
-            this.synthList[i].disconnect()
-            this.synthList[i] = new Tone.Synth({
-                oscillator: {
-                    type: this.type,
-                    volume: -12
-                }
-            }).toDestination()
+    changeSynth: function() {
+        if (this.effect === "reverb") {
+            const reverb = new Tone.Reverb(4).toDestination()
+            for (let i = 0; i < this.synthList.length; i++) {
+                this.synthList[i].disconnect()
+                this.synthList[i] = new Tone.Synth({
+                    oscillator: {
+                        type: this.type,
+                        volume: -12
+                    }
+                }).connect(reverb).toDestination()
+            }
         }
+
+        else {
+            console.log("hello")
+            for (let i = 0; i < this.synthList.length; i++) {
+                this.synthList[i].disconnect()
+                this.synthList[i] = new Tone.Synth({
+                    oscillator: {
+                        type: this.type,
+                        volume: -12
+                    }
+                }).toDestination()
+            }
+        }
+        
     },
     
     updateLoop : function(time) {
@@ -61,7 +82,6 @@ const ToneHelper = {
         }
 
         for (let i = this.list.length - 1; i >= 0; i--) {
-            console.log(this.list[i][this.beat]);
             if (this.list[i][this.beat] === 1) {
                 this.synthList[i].triggerAttackRelease(this.mode[(this.list.length - 1) - i], "16n", time) 
             }

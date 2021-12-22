@@ -31,9 +31,11 @@ function App() {
 
       {
         (visible) && (
-          <>
+          <div>
+            <AsideLeft></AsideLeft>
             <Main></Main>
-          </>
+            <AsideRight></AsideRight>
+          </div>
         )
       }
       

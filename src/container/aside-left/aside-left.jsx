@@ -1,6 +1,8 @@
+import style from "./aside-left.module.scss"
+
 const AsideLeft = function(props) {
     return (
-        <p>Hello</p>
+        <div className={style.main}></div>
     )
 }
 
